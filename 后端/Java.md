@@ -9,7 +9,7 @@ Keytool 是一个Java 数据证书的管理工具 ,Keytool 将密钥（key）和
 
 ### 生成签名证书
 ```
-keytool -genkey -alias testalias -keyalg RSA -keysize 2048 -validity 36500 -keystore test.keystore
+keytool -genkey -alias 证书别名 -keyalg RSA -keysize 2048 -validity 36500 -keystore 证书文件名.keystore
 ```
 * -alias：设置证书别名
 * -keystore：设置生成证书的文件名(可为路径，后缀必为.keystore)
@@ -19,8 +19,17 @@ keytool -genkey -alias testalias -keyalg RSA -keysize 2048 -validity 36500 -keys
 
 ### 查看签名证书信息
 ```
-keytool -list -v -keystore test.keystore
+keytool -list -v -keystore 证书文件名.keystore
 ```
 * -list：显示密钥库中的证书信息
 * -v：显示密钥库中的证书详细信息
 * -keystore：指定要查询的证书文件名（可用路径）
+
+### 修改keystore的别名
+```
+keytool -changealias -keystore 证书文件名.keystore -alias 旧别名 -destalias 新别名
+```
+* -changealias：修改证书别名
+* -keystore：指定要查询的证书文件名（可用路径）
+* -alias：输入旧别名
+* -destalias：输入新别名
