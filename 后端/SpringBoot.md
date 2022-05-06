@@ -14,6 +14,14 @@
   - [添加处理方法的参数规则](#添加处理方法的参数规则)
     - [@RequestBody](#requestbody)
     - [@RequestParam](#requestparam)
+- [SpringBoot的自动注入](#springboot的自动注入)
+  - [@Autowired注解](#autowired注解)
+    - [@Autowired的byType注入](#autowired的bytype注入)
+    - [@Autowired的byName注入](#autowired的byname注入)
+  - [@Resource注解](#resource注解)
+    - [@Resource的byType注入](#resource的bytype注入)
+    - [@Resource的byName注入](#resource的byname注入)
+  - [构造函数注入](#构造函数注入)
 - [SpringBoot配置文件](#springboot配置文件)
   - [SpringBoot的核心配置文件](#springboot的核心配置文件)
   - [SpringBoot自定义配置](#springboot自定义配置)
@@ -24,6 +32,8 @@
   - [定义拦截配置](#定义拦截配置)
 # SpringBoot的语义化注解
 SpringBoot有应用于类上的语义化注解，这类注解的作用一样，有多种是为了增强可读性，本质都是把此类加载到Spring容器当中。
+
+它们都可以接收一个可选参数，作为容器里面的唯一标识符，若不输入则默认为类名(第一个字母小写)，例如：``@Controller("testName")``。
 ## @Controller
 @Controller注解用于标注控制层组件。
 ## @Service
@@ -175,6 +185,155 @@ public Object newVillage(@RequestBody String[] villages) {
 ```
 public Object test(@RequestParam(value="name", required=true, defaultValue="hello") String name)
 ```
+
+# SpringBoot的自动注入
+## @Autowired注解
+@Autowired注解是Spring提供，只按照byType进行注入。@Autowired如果想要按照byName方式需要加@Qualifier，它可以对类成员变量、方法及构造函数进行标注，完成自动装配的工作。
+
+<img src="./image/SpringBoot/@Autowired查找bean流程.jpg">
+
+### @Autowired的byType注入
+```
+// TestRepositoryJdbcImpl类
+@Repository
+public class TestRepositoryJdbcImpl implements TestRepositoryInterface {
+
+    @Override
+    public String save() {
+        return "TestRepositoryJdbcImpl save methods!";
+    }
+}
+
+// TestController类
+@RestController
+@ResponseBody
+public class TestController {
+
+    @Autowired
+    private TestRepositoryInterface testRepositoryJdbcImpl;
+
+    @GetMapping("/test/getTestRepository")
+    public String getTestRepository() {
+        return testRepositoryJdbcImpl.save();
+    }
+}
+```
+### @Autowired的byName注入
+```
+// TestRepositoryJdbcImpl类
+@Repository("test")
+public class TestRepositoryJdbcImpl implements TestRepositoryInterface {
+
+    @Override
+    public String save() {
+        return "TestRepositoryJdbcImpl save methods!";
+    }
+}
+
+// TestController类
+@RestController
+@ResponseBody
+public class TestController {
+
+    @Autowired
+    @Qualifier("test")
+    private TestRepositoryInterface testRepositoryUserImpl;
+
+    @GetMapping("/test/getTestRepository")
+    public String getTestRepository() {
+        return testRepositoryUserImpl.save();
+    }
+}
+```
+## @Resource注解
+@Resource注解是Java标准库提供。默认采用byName方式进行注入，如果找不到则使用byType。可通过注解参数进行改变。比起Autowired好处在于跟Spring的耦合度没有那么高。
+
+<img src="./image/SpringBoot/@Resource查找bean流程.jpg">
+
+### @Resource的byType注入
+```
+// TestRepositoryJdbcImpl类
+@Repository
+public class TestRepositoryUserImpl implements TestRepositoryInterface {
+
+    @Override
+    public String save() {
+        return "TestRepositoryUserImpl save methods!";
+    }
+}
+
+
+// TestController类
+@RestController
+@ResponseBody
+public class TestController {
+
+    @Resource
+    private TestRepositoryInterface testRepositoryUserImpl;
+
+    @GetMapping("/test/getTestRepository")
+    public String getTestRepository() {
+        return testRepositoryUserImpl.save();
+    }
+}
+```
+### @Resource的byName注入
+```
+// TestRepositoryJdbcImpl类
+@Repository("test")
+public class TestRepositoryJdbcImpl implements TestRepositoryInterface {
+
+    @Override
+    public String save() {
+        return "TestRepositoryJdbcImpl save methods!";
+    }
+}
+
+// TestController类
+@RestController
+@ResponseBody
+public class TestController {
+
+    @Resource(name = "test")
+    private TestRepositoryInterface test;
+
+    @GetMapping("/test/getTestRepository")
+    public String getTestRepository() {
+        return test.save();
+    }
+}
+```
+## 构造函数注入
+Spring推荐的注入方式，因为@Autowired和@Resource通过反射将对象直接注入私有属性，会破环封装性。
+```
+// TestRepositoryJdbcImpl类
+@Repository
+public class TestRepositoryJdbcImpl implements TestRepositoryInterface {
+
+    @Override
+    public String save() {
+        return "TestRepositoryJdbcImpl save methods!";
+    }
+}
+
+// TestController类
+@RestController
+@ResponseBody
+public class TestController {
+
+    private TestRepositoryInterface testRepositoryJdbcImpl;
+
+    public TestController(TestRepositoryInterface testRepositoryJdbcImpl) {
+        this.testRepositoryJdbcImpl = testRepositoryJdbcImpl;
+    }
+
+    @GetMapping("/test/getTestRepository")
+    public String getTestRepository() {
+        return testRepositoryJdbcImpl.save();
+    }
+}
+```
+
 # SpringBoot配置文件
 ## SpringBoot的核心配置文件
 SpringBoot核心配置文件为resources文件夹内的application.properties文件
