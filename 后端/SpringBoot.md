@@ -30,6 +30,7 @@
 - [SpringBoot拦截器](#springboot拦截器)
   - [创建拦截器](#创建拦截器)
   - [定义拦截配置](#定义拦截配置)
+- [使用Mybatis操作数据库](#使用mybatis操作数据库)
 # SpringBoot的语义化注解
 SpringBoot有应用于类上的语义化注解，这类注解的作用一样，有多种是为了增强可读性，本质都是把此类加载到Spring容器当中。
 
@@ -72,6 +73,7 @@ public class HelloController {
         return "hello";
     }
 }
+
 // 控制类的所有方法默认返回JSON
 @Controller
 @ResponseBody
@@ -113,7 +115,7 @@ public class HelloController {
 @RequestMapping("/api")
 public class HelloController {
 
-    @RequestMapping(value="/hello", method= RequestMethod.POST)
+    @RequestMapping(value="/hello", method=RequestMethod.POST)
     public String sayHello(){
         return "hello";
     }
@@ -142,7 +144,7 @@ public class HelloController {
 直接在处理方法中写好要传入的值的类型和别名即可，在前端传入的参数别名必须和处理方法设置的一样。
 ```
 @RequestMapping(value = "/village/new", method = RequestMethod.POST)
-public Object newVillage(@RequestBody String[] villages) {
+public Object newVillage(String[] villages) {
     int cnt = villageService.newVillage(villages);
     if (cnt > 0) {
         return R.successBack();
@@ -407,6 +409,7 @@ public class LoginComponent {
 
     private String password;
 
+    // 如果在application.yml定义的名称以'-'分割，也可以使用驼峰命名法
     private String maxLength;
 
     public String getName() {
@@ -516,3 +519,4 @@ public class InterceptorConfig implements WebMvcConfigurer {
 }
 
 ```
+# 使用Mybatis操作数据库
