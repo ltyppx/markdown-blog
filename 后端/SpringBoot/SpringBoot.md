@@ -1,12 +1,13 @@
 文章目录
-- [SpringBoot的语义化注解](#springboot的语义化注解)
+
+- [SpringBoot 的语义化注解](#springboot的语义化注解)
   - [@Controller](#controller)
   - [@Service](#service)
   - [@Repository](#repository)
   - [@Component](#component)
-- [SpringBoot的控制器](#springboot的控制器)
+- [SpringBoot 的控制器](#springboot的控制器)
   - [注册控制器](#注册控制器)
-  - [控制器处理方法返回JSON](#控制器处理方法返回json)
+  - [控制器处理方法返回 JSON](#控制器处理方法返回json)
   - [控制器接收请求](#控制器接收请求)
   - [获取请求中的参数](#获取请求中的参数)
     - [正常获取请求中的参数](#正常获取请求中的参数)
@@ -14,38 +15,52 @@
   - [添加处理方法的参数规则](#添加处理方法的参数规则)
     - [@RequestBody](#requestbody)
     - [@RequestParam](#requestparam)
-- [SpringBoot的自动注入](#springboot的自动注入)
-  - [@Autowired注解](#autowired注解)
-    - [@Autowired的byType注入](#autowired的bytype注入)
-    - [@Autowired的byName注入](#autowired的byname注入)
-  - [@Resource注解](#resource注解)
-    - [@Resource的byType注入](#resource的bytype注入)
-    - [@Resource的byName注入](#resource的byname注入)
+- [SpringBoot 的自动注入](#springboot的自动注入)
+  - [@Autowired 注解](#autowired注解)
+    - [@Autowired 的 byType 注入](#autowired的bytype注入)
+    - [@Autowired 的 byName 注入](#autowired的byname注入)
+  - [@Resource 注解](#resource注解)
+    - [@Resource 的 byType 注入](#resource的bytype注入)
+    - [@Resource 的 byName 注入](#resource的byname注入)
   - [构造函数注入](#构造函数注入)
-- [SpringBoot配置文件](#springboot配置文件)
-  - [SpringBoot的核心配置文件](#springboot的核心配置文件)
-  - [SpringBoot自定义配置](#springboot自定义配置)
+- [SpringBoot 配置文件](#springboot配置文件)
+  - [SpringBoot 的核心配置文件](#springboot的核心配置文件)
+  - [SpringBoot 自定义配置](#springboot自定义配置)
     - [@Value](#value)
     - [@ConfigurationProperties](#configurationproperties)
-- [SpringBoot拦截器](#springboot拦截器)
+- [SpringBoot 拦截器](#springboot拦截器)
   - [创建拦截器](#创建拦截器)
   - [定义拦截配置](#定义拦截配置)
-- [使用Mybatis操作数据库](#使用mybatis操作数据库)
-# SpringBoot的语义化注解
-SpringBoot有应用于类上的语义化注解，这类注解的作用一样，有多种是为了增强可读性，本质都是把此类加载到Spring容器当中。
+- [使用 Mybatis 操作数据库](#使用mybatis操作数据库)
 
-它们都可以接收一个可选参数，作为容器里面的唯一标识符，若不输入则默认为类名(第一个字母小写)，例如：``@Controller("testName")``。
+# SpringBoot 的语义化注解
+
+SpringBoot 有应用于类上的语义化注解，这类注解的作用一样，有多种是为了增强可读性，本质都是把此类加载到 Spring 容器当中。
+
+它们都可以接收一个可选参数，作为容器里面的唯一标识符，若不输入则默认为类名(第一个字母小写)，例如：`@Controller("testName")`。
+
 ## @Controller
-@Controller注解用于标注控制层组件。
+
+@Controller 注解用于标注控制层组件。
+
 ## @Service
-@Service用于标注业务层组件。
+
+@Service 用于标注业务层组件。
+
 ## @Repository
-@Repository用于标注数据访问组件，即DAO组件。
+
+@Repository 用于标注数据访问组件，即 DAO 组件。
+
 ## @Component
-@Component泛指组件，当组件不好归类的时候，我们可以使用这个注解进行标注。
-# SpringBoot的控制器
+
+@Component 泛指组件，当组件不好归类的时候，我们可以使用这个注解进行标注。
+
+# SpringBoot 的控制器
+
 ## 注册控制器
-使用@Controller注解放在控制类上方，让SpringBoot明白其是控制类。
+
+使用@Controller 注解放在控制类上方，让 SpringBoot 明白其是控制类。
+
 ```
 @Controller
 public class HelloController {
@@ -56,12 +71,16 @@ public class HelloController {
     }
 }
 ```
-## 控制器处理方法返回JSON
-如果想要控制器方法返回的是JSON，可以使用@ResponseBody注解或者@RestController注解：
-* @ResponseBody：可以放在控制类的方法上面，表示该方法返回JSON；也可以放在控制类上，表示该控制类所有方法默认都是返回JSON。
-* @RestController：可以当作@ResponseBody和@Controller的结合，其放在类上，表示该类是控制类，且类的所有方法默认返回JSON。
 
-注意：@ResponseBody注解是把方法返回的数据通过转换器转为对应的格式，再写入response对象的body区，其通常用来返回JSON或者XML。
+## 控制器处理方法返回 JSON
+
+如果想要控制器方法返回的是 JSON，可以使用@ResponseBody 注解或者@RestController 注解：
+
+- @ResponseBody：可以放在控制类的方法上面，表示该方法返回 JSON；也可以放在控制类上，表示该控制类所有方法默认都是返回 JSON。
+- @RestController：可以当作@ResponseBody 和@Controller 的结合，其放在类上，表示该类是控制类，且类的所有方法默认返回 JSON。
+
+注意：@ResponseBody 注解是把方法返回的数据通过转换器转为对应的格式，再写入 response 对象的 body 区，其通常用来返回 JSON 或者 XML。
+
 ```
 // 控制类的某个方法返回JSON
 @Controller
@@ -78,7 +97,7 @@ public class HelloController {
 @Controller
 @ResponseBody
 public class HelloController {
-    
+
     @RequestMapping(value="/hello", method= RequestMethod.GET)
     public String sayHello(){
         return "hello";
@@ -87,29 +106,33 @@ public class HelloController {
 
 @RestController
 public class HelloController {
-    
+
     @RequestMapping(value="/hello", method= RequestMethod.GET)
     public String sayHello(){
         return "hello";
     }
 }
 ```
+
 ## 控制器接收请求
-控制器就是用来接收请求并返回数据的，所以控制器的方法必须监听请求的路径，其一般使用@RequestMapping注解。
 
-@RequestMapping(value="请求路径", method="请求方法")：@RequestMapping注解接收请求路径参数和请求方法可选参数。其可以放在控制器的类上，这注解会应用到控制类下所有处理方法；也可以只放在控制器的方法上，若类上有该注解而方法上也有，方法的该注解为类上的该注解的补充和覆盖。
+控制器就是用来接收请求并返回数据的，所以控制器的方法必须监听请求的路径，其一般使用@RequestMapping 注解。
 
-@RequestMapping的method属性可以使用RequestMethod类，其静态属性表示接收哪种请求，如下：
-  * RequestMethod.GET
-  * RequestMethod.HEAD
-  * RequestMethod.POST
-  * RequestMethod.PUT
-  * RequestMethod.PATCH
-  * RequestMethod.DELETE
-  * RequestMethod.OPTIONS
-  * RequestMethod.TRACE
+@RequestMapping(value="请求路径", method="请求方法")：@RequestMapping 注解接收请求路径参数和请求方法可选参数。其可以放在控制器的类上，这注解会应用到控制类下所有处理方法；也可以只放在控制器的方法上，若类上有该注解而方法上也有，方法的该注解为类上的该注解的补充和覆盖。
 
-注意：@RequestMapping注解默认返回的是路径，所以要返回JSON数据必须使用@ResponseBody或有其作用的注解。
+@RequestMapping 的 method 属性可以使用 RequestMethod 类，其静态属性表示接收哪种请求，如下：
+
+- RequestMethod.GET
+- RequestMethod.HEAD
+- RequestMethod.POST
+- RequestMethod.PUT
+- RequestMethod.PATCH
+- RequestMethod.DELETE
+- RequestMethod.OPTIONS
+- RequestMethod.TRACE
+
+注意：@RequestMapping 注解默认返回的是路径，所以要返回 JSON 数据必须使用@ResponseBody 或有其作用的注解。
+
 ```
 @RestController
 @RequestMapping("/api")
@@ -121,14 +144,17 @@ public class HelloController {
     }
 }
 ```
+
 若要更直观的知道该处理方法是接收什么方法，有新注解可代替@RequestMapping，如下：
-* @GetMapping
-* @PostMapping
-* @PutMapping
-* @DeleteMapping
-* @PatchMapping
+
+- @GetMapping
+- @PostMapping
+- @PutMapping
+- @DeleteMapping
+- @PatchMapping
 
 注意：这些注解同@RequestMapping，默认都是返回路径。
+
 ```
 @RestController
 public class HelloController {
@@ -139,9 +165,13 @@ public class HelloController {
     }
 }
 ```
+
 ## 获取请求中的参数
+
 ### 正常获取请求中的参数
+
 直接在处理方法中写好要传入的值的类型和别名即可，在前端传入的参数别名必须和处理方法设置的一样。
+
 ```
 @RequestMapping(value = "/village/new", method = RequestMethod.POST)
 public Object newVillage(String[] villages) {
@@ -152,21 +182,30 @@ public Object newVillage(String[] villages) {
     return R.errorBack("新增失败");
 }
 ```
+
 ### 获取请求路径中的占位符的值
+
 请求路径中的占位符是指在请求路径的设置时设置的可动态变化的值。
+
 ```
 @RequestMapping(value="user/{id}/{name}")
 ```
-要获取上面动态变化的id和name属性，使用@PathVariable("xxx")注解，该注解用于处理方法的属性当中。
 
-注意：id和name必须和@PathVariable()注解里面的值一样，如@PathVariable("id")和@PathVariable("name")。
+要获取上面动态变化的 id 和 name 属性，使用@PathVariable("xxx")注解，该注解用于处理方法的属性当中。
+
+注意：id 和 name 必须和@PathVariable()注解里面的值一样，如@PathVariable("id")和@PathVariable("name")。
+
 ```
 @RequestMapping("show/{id}/{name}")
 public Object test(@PathVariable("id") Long id, @PathVariable("name") String name)
 ```
+
 ## 添加处理方法的参数规则
+
 ### @RequestBody
-@RequestBody注解用于处理方法接收的参数中，且只能指定一个参数，表示必须传该参数。
+
+@RequestBody 注解用于处理方法接收的参数中，且只能指定一个参数，表示必须传该参数。
+
 ```
 @RequestMapping(value = "/village/new", method = RequestMethod.POST)
 public Object newVillage(@RequestBody String[] villages) {
@@ -177,24 +216,31 @@ public Object newVillage(@RequestBody String[] villages) {
     return R.errorBack("新增失败");
 }
 ```
-### @RequestParam
-@RequestParam注解同样用于处理方法接收的参数中，不过其可以应用多个，且有自己的属性可写。
 
-语法：``@RequestParam(value="参数名", required="true / false",defaultValue="默认值")``
-* value：参数名，和处理方法的参数名必须一致。
-* required：可选值，是否包含该参数，默认为true，表示必须包含该参数。
-* defaultValue：可选值，设置了改值，required=true就会失效，如没传参数，就是用默认值。
+### @RequestParam
+
+@RequestParam 注解同样用于处理方法接收的参数中，不过其可以应用多个，且有自己的属性可写。
+
+语法：`@RequestParam(value="参数名", required="true / false",defaultValue="默认值")`
+
+- value：参数名，和处理方法的参数名必须一致。
+- required：可选值，是否包含该参数，默认为 true，表示必须包含该参数。
+- defaultValue：可选值，设置了改值，required=true 就会失效，如没传参数，就是用默认值。
+
 ```
 public Object test(@RequestParam(value="name", required=true, defaultValue="hello") String name)
 ```
 
-# SpringBoot的自动注入
-## @Autowired注解
-@Autowired注解是Spring提供，只按照byType进行注入。@Autowired如果想要按照byName方式需要加@Qualifier，它可以对类成员变量、方法及构造函数进行标注，完成自动装配的工作。
+# SpringBoot 的自动注入
 
-<img src="./image/SpringBoot/@Autowired查找bean流程.jpg">
+## @Autowired 注解
 
-### @Autowired的byType注入
+@Autowired 注解是 Spring 提供，只按照 byType 进行注入。@Autowired 如果想要按照 byName 方式需要加@Qualifier，它可以对类成员变量、方法及构造函数进行标注，完成自动装配的工作。
+
+<img src="./image/@Autowired查找bean流程.jpg">
+
+### @Autowired 的 byType 注入
+
 ```
 // TestRepositoryJdbcImpl类
 @Repository
@@ -220,7 +266,9 @@ public class TestController {
     }
 }
 ```
-### @Autowired的byName注入
+
+### @Autowired 的 byName 注入
+
 ```
 // TestRepositoryJdbcImpl类
 @Repository("test")
@@ -247,12 +295,15 @@ public class TestController {
     }
 }
 ```
-## @Resource注解
-@Resource注解是Java标准库提供。默认采用byName方式进行注入，如果找不到则使用byType。可通过注解参数进行改变。比起Autowired好处在于跟Spring的耦合度没有那么高。
 
-<img src="./image/SpringBoot/@Resource查找bean流程.jpg">
+## @Resource 注解
 
-### @Resource的byType注入
+@Resource 注解是 Java 标准库提供。默认采用 byName 方式进行注入，如果找不到则使用 byType。可通过注解参数进行改变。比起 Autowired 好处在于跟 Spring 的耦合度没有那么高。
+
+<img src="./image/@Resource查找bean流程.jpg">
+
+### @Resource 的 byType 注入
+
 ```
 // TestRepositoryJdbcImpl类
 @Repository
@@ -279,7 +330,9 @@ public class TestController {
     }
 }
 ```
-### @Resource的byName注入
+
+### @Resource 的 byName 注入
+
 ```
 // TestRepositoryJdbcImpl类
 @Repository("test")
@@ -305,8 +358,11 @@ public class TestController {
     }
 }
 ```
+
 ## 构造函数注入
-Spring推荐的注入方式，因为@Autowired和@Resource通过反射将对象直接注入私有属性，会破环封装性。
+
+Spring 推荐的注入方式，因为@Autowired 和@Resource 通过反射将对象直接注入私有属性，会破环封装性。
+
 ```
 // TestRepositoryJdbcImpl类
 @Repository
@@ -336,34 +392,41 @@ public class TestController {
 }
 ```
 
-# SpringBoot配置文件
-## SpringBoot的核心配置文件
-SpringBoot核心配置文件为resources文件夹内的application.properties文件
+# SpringBoot 配置文件
 
-application.properties值的格式为： ``object.item.key=value`` 
+## SpringBoot 的核心配置文件
 
-SpringBoot核心配置文件后缀除了为properties，还能为yml或yaml
+SpringBoot 核心配置文件为 resources 文件夹内的 application.properties 文件
 
-application.yml和application.yaml值的格式为 ：
+application.properties 值的格式为： `object.item.key=value`
+
+SpringBoot 核心配置文件后缀除了为 properties，还能为 yml 或 yaml
+
+application.yml 和 application.yaml 值的格式为 ：
+
 ```
 object:
     item:
         key: value
-``` 
+```
 
-要注意SpringBoot核心配置文件后缀有三种，但是名称必须为application，且只能有一个
+要注意 SpringBoot 核心配置文件后缀有三种，但是名称必须为 application，且只能有一个
 
-SpringBoot核心配置文件可以根据环境匹配相应的核心配置文件
+SpringBoot 核心配置文件可以根据环境匹配相应的核心配置文件
 
-根据环境匹配的核心配置文件必须按规定的格式命名 ``application-{自定义}.{properties|yml|yaml}``
+根据环境匹配的核心配置文件必须按规定的格式命名 `application-{自定义}.{properties|yml|yaml}`
 
-然后在application.properties中引入 ``server.servlet.context-path=/自定义``
-## SpringBoot自定义配置
-SpringBoot中除了使用内置配置项外，还可以去自定义配置，然后在类中获取配置的属性值。
+然后在 application.properties 中引入 `server.servlet.context-path=/自定义`
+
+## SpringBoot 自定义配置
+
+SpringBoot 中除了使用内置配置项外，还可以去自定义配置，然后在类中获取配置的属性值。
+
 ### @Value
-@Value注解用于获取自定义配置的属性值，其用于类中的属性。
 
-语法：``@Value("${属性名}")``
+@Value 注解用于获取自定义配置的属性值，其用于类中的属性。
+
+语法：`@Value("${属性名}")`
 
 ```
 // application.yml文件
@@ -388,10 +451,12 @@ public class TestController {
     }
 }
 ```
-### @ConfigurationProperties
-@ConfigurationProperties注解也是用于获取自定义配置的属性值，不过其是用于类上，相当于一次使用了多个@Value注解。
 
-语法：``@ConfigurationProperties(prefix = "前缀名")``
+### @ConfigurationProperties
+
+@ConfigurationProperties 注解也是用于获取自定义配置的属性值，不过其是用于类上，相当于一次使用了多个@Value 注解。
+
+语法：`@ConfigurationProperties(prefix = "前缀名")`
 
 ```
 // application.yml文件
@@ -455,8 +520,11 @@ public class TestController {
     }
 }
 ```
-# SpringBoot拦截器
+
+# SpringBoot 拦截器
+
 ## 创建拦截器
+
 ```
 package com.springboot.test.interceptor;
 
@@ -492,7 +560,9 @@ public class UserInterceptor implements HandlerInterceptor {
 }
 
 ```
+
 ## 定义拦截配置
+
 ```
 package com.springboot.test.config;
 
@@ -519,4 +589,5 @@ public class InterceptorConfig implements WebMvcConfigurer {
 }
 
 ```
-# 使用Mybatis操作数据库
+
+# 使用 Mybatis 操作数据库
